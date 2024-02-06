@@ -37,9 +37,7 @@ style_mono_accent(
 ```{r, include = F}
 knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = F)
 library(flipbookr)
-library(icons)
 library(tidyverse)
-library(DataExplorer)
 library(here)
 ```
 
@@ -56,41 +54,6 @@ ds <- left_join(ds, demo, by = c("id" = "subject_number"))
 ds <- ds %>% relocate(test_date:humidity, .after = condition)
 ```
 
-# CDA vs. EDA
-
-- Goals of Confirmatory Data Analysis
-  * Hypothesis testing, probabilistic modeling, inference
-- Goals of Exploratory Data Analysis (Tukey)
-  * Understanding the patterns in the data
-  * Generating hypotheses
-  * Checking your assumptions about data quality
-  * “To find the unexpected, to avoid being fooled, and to develop rich descriptions” (Behrens & Yu, 2003)
-
----
-# Why do we need EDA? 
-- Summarizing = a loss of information
-  * If you first look at summarized data (across trials, across participants, etc.), you may miss important patterns that exist at the raw data level
-- Statistics lie, so you need graphics
-  * Correlations without looking at the scatterplot
-  * Means without examining outliers/distribution
-  * Statistical tests without checking *N*
-
-.footnote[.small[.bold[[Behrens & Yu, 2013](https://psycnet.apa.org/record/2012-27075-002)]]]
-
----
-# Today's tutorial
-
-- Ways to explore and check data
-  * `dplyr` functions like `filter()`, `summarize()`, and `count()`
-  * Specialized packages: `DataExplorer`
-  * Plotting distributions using `ggplot2`
- 
-.content-box-blue[
-`r icons::fontawesome("github")` Follow along from the [Github repo](https://github.com/psych-259-data-science-2022/259-exploratory-data-analysis)
-]
-
-.footnote[.small[.bold[Last updated: `r Sys.Date()`]]]
-
 ---
 # Example data for today
 ```{r}
@@ -98,88 +61,8 @@ glimpse(ds)
 ```
 
 ---
-# Things we already know how to do
-```{r}
-# Filter based on expected ranges
-ds %>% select(id, age) %>% filter(age < 18 | age > 22)
-# Filter based a set of possible values
-ds %>% select(id, handedness) %>% filter(!(handedness %in% c("Right", "Left")))
-```
----
-# Things we already know how to do
-```{r}
-# Get summary stats
-ds %>% summarize(age_min = min(age), mean_age = mean(age), max_age = max(age))
-ds %>% drop_na(age) %>% summarize(age_min = min(age), mean_age = mean(age), max_age = max(age))
-summary(ds$age) #Also a nice option
-```
----
-# Things we already know how to do
-```{r}
-# Check the number of participant ids
-length(unique(ds$id)) # Should be 30
-# Count
-count(ds, sex)
-```
+# Introducing the `ggplot2` package
 
----
-# Other ways to explore data
-
-- `DataExplorer` package
-  * Quickly generate EDA plots for every column in your dataset
-  * `plot_histogram` and `plot_density` for continuous variables
-  * `plot_bar` for categorical
-  * `plot_boxplot` for detecting outliers
-  * `plot_missing` for missingness
-  * `plot_correlation` for between-column correlations at a glance
-  * `create_report` for everything
-- What it's not for: making publication-ready plots
-
----
-## Data Explorer: Histograms
-```{r}
-ds %>% select(condition, gazex_std:posy_speed) %>% plot_histogram()
-```
-
----
-## Data Explorer: Density plots
-```{r}
-ds %>% select(condition, gazex_std:posy_speed) %>% plot_density()
-```
-
----
-## Data Explorer: Boxplots by condition
-```{r}
-ds %>% select(condition, gazex_std:posy_speed) %>% plot_boxplot(by = "condition")
-```
-
----
-## Data Explorer: Plot missing
-```{r}
-ds %>% select(id:humidity) %>% plot_missing()
-```
-
----
-## Data Explorer: Correlations
-```{r}
-ds %>% select(condition, gazex_std:posy_speed) %>% plot_correlation()
-```
-
----
-## Data Explorer: Create Report
-
-- `create_report()` is a brute force approach, which makes every imaginable plot
-- Usually better to narrow in to make sure that you're scanning plots that make sense
-
-```{r, eval = F}
-ds %>% create_report()
-# Saves an html report to your working directory
-```
-
----
-# Other option: Make your own plots
-
-- Introducing the `ggplot2` package
 - Parts of a ggplot call:
 ```{r, eval = F}
 # Parts of a ggplot call
@@ -266,44 +149,6 @@ ggsave("eda/head-position-scatter.jpg")
 p1 <- ggplot(ds, aes(x = posx_mean, y = posy_mean)) + geom_point()
 ggsave("eda/head-position-scatter.jpg", plot = p1)
 ```
-
----
-# Automation + plotting
-
-- Each plot you create will appear in the plots tab in RStudio
-
-- Flipping through a few plots is OK, but not hundreds
-
-- Write plotting functions that can save plots to file to better organize them
-
----
-# Automation + plotting
-```{r}
-two_var_scatter <- function(df, var1, var2) {
-  df_to_plot <- df %>% 
-    select(c(var1, var2)) %>% 
-    rename(var_1 = 1, var_2 = 2)
-  p <- ggplot(df_to_plot, aes(x = var_1, y = var_2)) + 
-    geom_point() + 
-    xlab(var1) + 
-    ylab(var2)
-  ggsave(str_glue("eda/{var1}_{var2}.jpg"), plot = p)
-  return(p)
-}
-two_var_scatter(ds, "posx_std", "posy_std")
-```
-
----
-# Automation + plotting
-```{r}
-pred_x <- colnames(select(ds, posx_mean:eyey_speed)) %>% keep(str_detect, "x_")
-pred_x
-pred_y <- colnames(select(ds, posx_mean:eyey_speed)) %>% keep(str_detect, "y_")
-pred_y
-pred_x_by_y <- map2(pred_x, pred_y, ~ two_var_scatter(ds, .x, .y))
-pred_x_by_y
-```
-
 
 <!-- adjust font size and other formatting defs in this css code chunk -->
 ```{css, eval = TRUE, echo = FALSE}
