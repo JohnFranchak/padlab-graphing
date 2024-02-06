@@ -38,7 +38,6 @@ class: center, middle, inverse, title-slide
 
 
 
----
 # Example data for today
 
 ```r
@@ -734,6 +733,269 @@ p1 &lt;- ggplot(ds, aes(x = posx_mean, y = posy_mean)) + geom_point()
   font-size: 80%
 }
 &lt;/style&gt;
+
+
+
+
+
+---
+count: false
+ 
+Raw Data and Summaries
+.panel1-summaries-auto[
+
+```r
+*ggplot(ds, aes(x = condition, y = gazey_std))
+```
+]
+ 
+.panel2-summaries-auto[
+![](index_files/figure-html/summaries_auto_01_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Raw Data and Summaries
+.panel1-summaries-auto[
+
+```r
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+* geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray")
+```
+]
+ 
+.panel2-summaries-auto[
+![](index_files/figure-html/summaries_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Raw Data and Summaries
+.panel1-summaries-auto[
+
+```r
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+  geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray") +
+* stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2)
+```
+]
+ 
+.panel2-summaries-auto[
+![](index_files/figure-html/summaries_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Raw Data and Summaries
+.panel1-summaries-auto[
+
+```r
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+  geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray") +
+  stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2) +
+* coord_cartesian(ylim = c(0,30))
+```
+]
+ 
+.panel2-summaries-auto[
+![](index_files/figure-html/summaries_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-summaries-auto {
+  color: black;
+  width: 65.3333333333333%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-summaries-auto {
+  color: black;
+  width: 32.6666666666667%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-summaries-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
+
+
+
+
+---
+count: false
+ 
+Improving Aesthetics with Theme
+.panel1-theme-auto[
+
+```r
+*theme_update(text = element_text(size = 12),
+*  axis.text.x = element_text(size = 12, color = "black"),
+*  axis.title.x = element_text(size = 14),
+*  axis.text.y = element_text(size = 12,  color = "black"),
+*  axis.title.y = element_text(size = 14),
+*  panel.background = element_blank(),panel.border = element_blank(),
+*  panel.grid.major = element_blank(),
+*  panel.grid.minor = element_blank(), axis.line = element_blank(),
+*  axis.ticks.length=unit(.25, "cm"),
+*  legend.key = element_rect(fill = "white"))
+```
+]
+ 
+.panel2-theme-auto[
+
+]
+
+---
+count: false
+ 
+Improving Aesthetics with Theme
+.panel1-theme-auto[
+
+```r
+theme_update(text = element_text(size = 12),
+   axis.text.x = element_text(size = 12, color = "black"),
+   axis.title.x = element_text(size = 14),
+   axis.text.y = element_text(size = 12,  color = "black"),
+   axis.title.y = element_text(size = 14),
+   panel.background = element_blank(),panel.border = element_blank(),
+   panel.grid.major = element_blank(),
+   panel.grid.minor = element_blank(), axis.line = element_blank(),
+   axis.ticks.length=unit(.25, "cm"),
+   legend.key = element_rect(fill = "white"))
+
+*ggplot(ds, aes(x = condition, y = gazey_std))
+```
+]
+ 
+.panel2-theme-auto[
+![](index_files/figure-html/theme_auto_02_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Improving Aesthetics with Theme
+.panel1-theme-auto[
+
+```r
+theme_update(text = element_text(size = 12),
+   axis.text.x = element_text(size = 12, color = "black"),
+   axis.title.x = element_text(size = 14),
+   axis.text.y = element_text(size = 12,  color = "black"),
+   axis.title.y = element_text(size = 14),
+   panel.background = element_blank(),panel.border = element_blank(),
+   panel.grid.major = element_blank(),
+   panel.grid.minor = element_blank(), axis.line = element_blank(),
+   axis.ticks.length=unit(.25, "cm"),
+   legend.key = element_rect(fill = "white"))
+
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+* geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray")
+```
+]
+ 
+.panel2-theme-auto[
+![](index_files/figure-html/theme_auto_03_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Improving Aesthetics with Theme
+.panel1-theme-auto[
+
+```r
+theme_update(text = element_text(size = 12),
+   axis.text.x = element_text(size = 12, color = "black"),
+   axis.title.x = element_text(size = 14),
+   axis.text.y = element_text(size = 12,  color = "black"),
+   axis.title.y = element_text(size = 14),
+   panel.background = element_blank(),panel.border = element_blank(),
+   panel.grid.major = element_blank(),
+   panel.grid.minor = element_blank(), axis.line = element_blank(),
+   axis.ticks.length=unit(.25, "cm"),
+   legend.key = element_rect(fill = "white"))
+
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+  geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray") +
+* stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2)
+```
+]
+ 
+.panel2-theme-auto[
+![](index_files/figure-html/theme_auto_04_output-1.png)&lt;!-- --&gt;
+]
+
+---
+count: false
+ 
+Improving Aesthetics with Theme
+.panel1-theme-auto[
+
+```r
+theme_update(text = element_text(size = 12),
+   axis.text.x = element_text(size = 12, color = "black"),
+   axis.title.x = element_text(size = 14),
+   axis.text.y = element_text(size = 12,  color = "black"),
+   axis.title.y = element_text(size = 14),
+   panel.background = element_blank(),panel.border = element_blank(),
+   panel.grid.major = element_blank(),
+   panel.grid.minor = element_blank(), axis.line = element_blank(),
+   axis.ticks.length=unit(.25, "cm"),
+   legend.key = element_rect(fill = "white"))
+
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+  geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray") +
+  stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2) +
+* coord_cartesian(ylim = c(0,30))
+```
+]
+ 
+.panel2-theme-auto[
+![](index_files/figure-html/theme_auto_05_output-1.png)&lt;!-- --&gt;
+]
+
+&lt;style&gt;
+.panel1-theme-auto {
+  color: black;
+  width: 65.3333333333333%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-theme-auto {
+  color: black;
+  width: 32.6666666666667%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-theme-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+&lt;/style&gt;
+
 
 
 

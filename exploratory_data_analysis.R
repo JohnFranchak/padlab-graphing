@@ -1,5 +1,6 @@
 # Load packages
 library(tidyverse)
+library(ggforce)
 
 # Set up the file we'll be using
 
@@ -71,3 +72,27 @@ ggsave("eda/head-position-scatter.jpg")
 p1 <- ggplot(ds, aes(x = posx_mean, y = posy_mean)) + geom_point()
 ggsave("eda/head-position-scatter.jpg", plot = p1)
 
+# Graphing raw data and summaries
+
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+  geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray") + 
+  stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2)  +
+  coord_cartesian(ylim = c(0,30))
+
+# Fix the theme and rerun the graph
+
+theme_update(text = element_text(size = 12),
+   axis.text.x = element_text(size = 12, color = "black"), 
+   axis.title.x = element_text(size = 14),
+   axis.text.y = element_text(size = 12,  color = "black"), 
+   axis.title.y = element_text(size = 14), 
+   panel.background = element_blank(),panel.border = element_blank(), 
+   panel.grid.major = element_blank(),
+   panel.grid.minor = element_blank(), axis.line = element_blank(), 
+   axis.ticks.length=unit(.25, "cm"), 
+   legend.key = element_rect(fill = "white")) 
+
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+  geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray") + 
+  stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2)  +
+  coord_cartesian(ylim = c(0,30))
