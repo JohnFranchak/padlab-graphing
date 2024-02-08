@@ -52,30 +52,37 @@ ggplot(ds, aes(x = posx_mean, y = posy_mean)) +
 
 # Add category to scatterplot
 
-ggplot(ds, aes(x = posx_mean, y = posy_mean, color = condition)) + 
-  geom_point()
+ggplot(ds) + 
+  geom_point(aes(x = posx_mean, y = posy_mean, color = condition)) + 
+  geom_smooth(aes(x = posx_mean, y = posy_mean, color = condition), method = "lm", se = F) + 
+  geom_smooth(aes(x = posx_mean, y = posy_mean), method = "lm", se = F, color = "black")
 
 # Facetting a scatterplot
 
 ggplot(ds, aes(x = posx_mean, y = posy_mean)) + 
   geom_point() + 
-  facet_wrap("condition", ncol = 1)
+  facet_wrap("condition", nrow = 1)
 
 # Saving plots
 
 dir.create("eda") 
 ggplot(ds, aes(x = posx_mean, y = posy_mean)) + geom_point()
 #ggsave will save the last plot to file
-ggsave("eda/head-position-scatter.jpg")
+ggsave("eda/head-position-scatter.jpg", width = 5, height = 5, units = "in")
 
 #You can also save plots to objects (they are lists)
-p1 <- ggplot(ds, aes(x = posx_mean, y = posy_mean)) + geom_point()
+(p1 <- ggplot(ds, aes(x = posx_mean, y = posy_mean)) + geom_point())
 ggsave("eda/head-position-scatter.jpg", plot = p1)
 
 # Graphing raw data and summaries
 
 ggplot(ds, aes(x = condition, y = gazey_std)) +
   geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray") + 
+  stat_summary(color = "black", geom = "point", linewidth = .75, shape = "—", size = 8)  +
+  ylim = c(10,30)
+
+ggplot(ds, aes(x = condition, y = gazey_std)) +
+  stat_summary(color = "black", geom = "point", linewidth = .75, size = 3)  +
   stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2)  +
   coord_cartesian(ylim = c(0,30))
 
@@ -94,5 +101,13 @@ theme_update(text = element_text(size = 12),
 
 ggplot(ds, aes(x = condition, y = gazey_std)) +
   geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .75, color = "gray") + 
+  stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2)  +
+  coord_cartesian(ylim = c(0,30))
+
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+ggplot(ds, aes(x = condition, y = gazey_std, color = condition)) +
+  geom_sina(scale = "width", maxwidth = .25, size = 3, alpha = .25) + 
+  scale_color_manual(values = c("#E69F00", "#56B4E9")) + 
   stat_summary(color = "black", geom = "errorbar", linewidth = .75, width = .2)  +
   coord_cartesian(ylim = c(0,30))
